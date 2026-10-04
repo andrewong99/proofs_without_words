@@ -1,0 +1,35 @@
+# pww - the Python packages the app needs.
+#
+# On Windows, pww.bat installs them itself the first time it runs, into
+# .runtime\venv with Python 3.12 (see README.md). By hand:
+#
+#     python -m pip install -r requirements.txt
+#
+# Python 3.10 or newer. On Windows, 3.12 is the easy choice: every package
+# below has a ready-made wheel for it. As of October 2026, manim's moderngl
+# and glcontext have no Windows wheels for Python 3.14, so there pip has to
+# compile them, which needs Microsoft's C++ Build Tools; vpython's wheels stop
+# at 3.12 (on newer Pythons it builds from source, and without a compiler
+# leaves out its optional compiled speed-up). To give pww a Python 3.12 of its own, in .venv beside
+# the app, where pww.bat looks first (run these in the pww folder):
+#
+#     py install 3.12
+#     py -3.12 -m venv .venv
+#     .venv\Scripts\python.exe -m pip install -r requirements.txt
+#
+# (py install comes with Python's install manager; with the older py
+# launcher, install Python 3.12 from python.org instead.)
+#
+# No ffmpeg and no LaTeX are needed: manim encodes its videos through PyAV,
+# whose wheels bundle FFmpeg, and no scene or formula here is typeset with TeX.
+#
+# Linux only: manim's pycairo and manimpango may build from source and need
+#     sudo apt install libcairo2-dev libpango1.0-dev pkg-config
+
+manim>=0.19,<0.22        # 2D proofs, rendered to mp4 (tested with 0.21)
+vpython>=7.6             # 3D proofs, served to the embedded browser view
+setuptools<81            # vpython 7.6 still imports pkg_resources, gone in 81
+PyQt6>=6.5               # the window and its video player
+PyQt6-WebEngine>=6.5     # shows 3D proofs in the window (else: web browser)
+matplotlib>=3.8          # the formula panel (its \text needs 3.8 or newer)
+numpy>=1.24              # used directly by the scenes
